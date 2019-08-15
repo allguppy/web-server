@@ -5,6 +5,7 @@ const hbs = require("hbs");
 // const fs = require("fs");
 const fs = require("fs").promises;
 
+const PORT = process.env.PORT || 3000;
 const app = express();
 
 hbs.registerPartials(`${__dirname}/views/partials`);
@@ -16,7 +17,6 @@ app.use((req, res, next) =>
   const now = new Date().toString();
   const log = `Timestamp: ${now}\n${req.method} ${req.url}`;
 
-  // fs.appendFile(file, data, options, callback)
   fs.appendFile("server.log", `${log}\n`)
     .catch(err => console.log("Unable to append to server.log"));
 
@@ -24,11 +24,6 @@ app.use((req, res, next) =>
 
   next();
 });
-
-// app.use((req, res) =>
-// {
-//   res.render("maintenance.hbs");
-// });
 
 app.use(express.static(`${__dirname}/public`));
 
@@ -38,13 +33,6 @@ hbs.registerHelper("screamIt", text => text.toUpperCase());
 
 app.get("/", (req, res) =>
 {
-  // res.send("<h1>Hello express!</h1>");
-  // res.send
-  //   ({
-  //     name: "Andrew",
-  //     likes: ["Biking", "Cities"]
-  //   });
-
   res.render("home.hbs",
     {
       pageTitle: "Home Page",
@@ -54,7 +42,6 @@ app.get("/", (req, res) =>
 
 app.get("/about", (req, res) =>
 {
-  // res.send("About Page");
   res.render("about.hbs",
     {
       pageTitle: "About Page",
@@ -69,4 +56,4 @@ app.get("/bad", (req, res) =>
     });
 });
 
-app.listen(3000, () => console.log("Server is up on port 3000"));
+app.listen(PORT, () => console.log(`Server is up on port ${PORT}`));
